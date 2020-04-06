@@ -1,0 +1,17 @@
+downstream_package_name: scap-security-guide
+specfile_path: scap-security-guide.spec
+actions:
+  post-upstream-clone:
+    - wget -N https://src.fedoraproject.org/rpms/scap-security-guide/raw/master/f/scap-security-guide-0.1.48-xml_parsing.patch
+jobs:
+- job: copr_build
+  trigger: pull_request
+  metadata:
+    targets:
+    - fedora-all-x86_64
+- job: propose_downstream
+  metadata:
+    dist-git-branch: fedora-all
+  trigger: release
+- job: sync_from_downstream
+  trigger: commit
